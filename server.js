@@ -11,6 +11,7 @@ connectDB();
 
 // Router
 const bootcamp = require('./routes/bootcamp');
+const course = require('./routes/courses');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use(logger);
 app.use('/api/v1/bootcamps', bootcamp);
+app.use('/api/v1/courses', course);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5555;
