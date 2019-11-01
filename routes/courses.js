@@ -6,14 +6,21 @@ const {
     updateCourse,
     deleteCourse
 } = require('../controllers/course');
+const { protect } = require('../middlewares/auth');
+
+const Course = require('../models/Courses');
+const advanceResults = require('../middlewares/advanceResults');
 
 router.route('/')
-    .get(getCourses)
-    .post(addCourse)
+    .get(advanceResults(Course, {
+        path: 'bootcamp',
+        select: 'name description'
+    }), getCourses)
+    .post(protect, addCourse)
 
 router.route('/:id')
     .get(getSingleCourse)
-    .put(updateCourse)
-    .delete(deleteCourse)
+    .put(protect, updateCourse)
+    .delete(protect, deleteCourse)
 
 module.exports = router;
