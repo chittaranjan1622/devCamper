@@ -4,6 +4,11 @@ const logger = require('./middlewares/logger');
 const connectDB = require('./config/db');
 const fileupload = require('express-fileupload');
 const errorHandler = require('./middlewares/errorHandler');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
 const path = require('path');
 
 // Load env vars
@@ -26,6 +31,26 @@ app.use(logger);
 
 // File Upload
 app.use(fileupload());
+
+// Sanitize NoSQL injection
+app.use(mongoSanitize());
+
+// Set Security headers
+app.use(helmet());
+
+// XSS clean
+app.use(xss());
+
+// Rate Limiting 
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 1min
+    max: 1000
+});
+
+app.use(rateLimit(limiter));
+
+// Prevent http param pollution
+app.use(hpp());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));

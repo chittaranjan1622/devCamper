@@ -59,6 +59,20 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 });
 
+// @desc    Log User Out
+// @route   GET /api/v1/auth/me
+// @access  PRIVATE
+exports.logout = asyncHandler(async (req, res, next) => {
+    res.cookie('token', 'none', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    })
+    res.status(200).json({
+        success: true,
+        data: {}
+    })
+})
+
 // @desc    Get User
 // @route   GET /api/v1/auth/me
 // @access  PRIVATE
@@ -66,7 +80,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user.id);
     res.status(200).json({
         success: true,
-        user
+        data: user
     })
 })
 
@@ -86,7 +100,7 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        user
+        data: user
     })
 })
 
