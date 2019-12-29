@@ -10,6 +10,7 @@ const sendEmail = require('../utils/sendEmail');
 
 exports.register = asyncHandler(async (req, res, next) => {
     const { name, email, password, role } = req.body;
+    console.log(name, email, password, role)
 
     // Create USer
     const user = await User.create({
